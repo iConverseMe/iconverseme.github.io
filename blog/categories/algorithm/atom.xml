@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Algorithm | Hello, I'm ConverseMe]]></title>
+  <title><![CDATA[Category: algorithm | Hello, I'm ConverseMe]]></title>
   <link href="http://iConverseMe.github.io/blog/categories/algorithm/atom.xml" rel="self"/>
   <link href="http://iConverseMe.github.io/"/>
-  <updated>2014-10-22T17:36:27+08:00</updated>
+  <updated>2014-10-22T17:39:46+08:00</updated>
   <id>http://iConverseMe.github.io/</id>
   <author>
     <name><![CDATA[ConverseMe]]></name>
@@ -14,13 +14,11 @@
 
   
   <entry>
-    <title type="html"><![CDATA[[Leetcode] Search a 2D Matrix]]></title>
+    <title type="html"><![CDATA[[leetcode] Search a 2D Matrix]]></title>
     <link href="http://iConverseMe.github.io/blog/2014/10/22/leetcode/"/>
     <updated>2014-10-22T16:14:52+08:00</updated>
     <id>http://iConverseMe.github.io/blog/2014/10/22/leetcode</id>
-    <content type="html"><![CDATA[<h2>Search a 2D Matrix</h2>
-
-<p>Solution 1: first find the target row, then use binary search find the target number in the row. The target row i must meet matrix[i][0] &lt;= target &amp;&amp; target &lt; matrix[i+1][0], or will return the last row.
+    <content type="html"><![CDATA[<p>Solution 1: first find the target row, then use binary search find the target number in the row. The target row i must meet matrix[i][0] &lt;= target &amp;&amp; target &lt; matrix[i+1][0], or will return the last row.
 And time complexity is O(m) + O(lg(n)).</p>
 
 <pre><code>
