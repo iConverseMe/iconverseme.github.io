@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Algorithm | My Octopress Blog]]></title>
+  <title><![CDATA[Category: Algorithm | Hello, I'm ConverseMe]]></title>
   <link href="http://iConverseMe.github.io/blog/categories/algorithm/atom.xml" rel="self"/>
   <link href="http://iConverseMe.github.io/"/>
-  <updated>2014-10-22T17:33:28+08:00</updated>
+  <updated>2014-10-22T17:36:27+08:00</updated>
   <id>http://iConverseMe.github.io/</id>
   <author>
-    <name><![CDATA[Your Name]]></name>
+    <name><![CDATA[ConverseMe]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
