@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: leetcode, | Hello, I'm ConverseMe]]></title>
+  <link href="http://iConverseMe.github.io/blog/categories/leetcode/atom.xml" rel="self"/>
+  <link href="http://iConverseMe.github.io/"/>
+  <updated>2014-10-22T17:53:24+08:00</updated>
+  <id>http://iConverseMe.github.io/</id>
+  <author>
+    <name><![CDATA[ConverseMe]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[[leetcode] Search a 2D Matrix]]></title>
+    <link href="http://iConverseMe.github.io/blog/2014/10/22/leetcode/"/>
+    <updated>2014-10-22T16:14:52+08:00</updated>
+    <id>http://iConverseMe.github.io/blog/2014/10/22/leetcode</id>
+    <content type="html"><![CDATA[<p>Solution 1: first find the target row, then use binary search find the target number in the row. The target row i must meet matrix[i][0] &lt;= target &amp;&amp; target &lt; matrix[i+1][0], or will return the last row.
+And time complexity is O(m) + O(lg(n)).</p>
+
+<pre><code>
+public class Solution {
+    public boolean searchMatrix(int[][] matrix, int target) {
+        if(target &lt; matrix[0][0]) return false;
+        if(target &gt; matrix[matrix.length - 1][matrix[0].length - 1]) return false;
+
+        int row = 0;
+        int rowCount = matrix.length - 1;
+        while(row &lt; rowCount) {
+             if(matrix[row][0] &lt;= target &amp;&amp; target &lt; matrix[row+1][0]) {
+                  break;
+             } else {
+                  row ++;
+             }
+        }
+        int left = 0;
+        int right = matrix[0].length - 1;
+        int mid = 0;
+        while(left &lt;= right) {
+             mid = (left + right)/2;
+             if(matrix[row][mid] == target) return true;
+             if(matrix[row][mid] &gt; target) 
+                  right = mid - 1;
+             else
+                  left = mid + 1;
+        }
+        return false;
+    }
+}
+</code></pre>
+
+<p>Solution 2: use binary search two times. First, use binary search to find the target row, than find the target in the row.
+And time complexity is O(lg(m)) + O(lg(n))</p>
+
+<pre><code>public class Solution {
+    public boolean searchMatrix(int[][] matrix, int target) {
+        int rows = matrix.length;
+        int left = 0;
+        int right = rows - 1;
+        int mid = 0;
+        while(left &lt;= right) {
+            mid = (left + right)/2;
+            if(matrix[mid][0] == target) return true;
+            if(matrix[mid][0] &gt; target)
+                right = mid - 1;
+            else
+                left = mid + 1;
+        }
+        int index = (left+right)/2; //selected row index
+        if(index &gt;= rows) return false;
+        left = 0;
+        right = matrix[left].length - 1;
+        while(left &lt;= right) {
+            mid = (left + right)/2;
+            if(matrix[index][mid] == target) return true;
+            if(matrix[index][mid] &gt; target)
+                right = mid - 1;
+            else
+                left = mid + 1;
+        }
+        return false;
+    }
+}
+</code></pre>
+
+<p>Solution 3: actually, all the elements in the matrix are sorted row by row. So consider the whole matrix as a sorted array, and use binary search once to find the target.
+And time complexity is O(lg(m*n))</p>
+
+<pre><code>public class Solution {
+    public boolean searchMatrix(int[][] matrix, int target) {
+        int m = matrix.length;
+        int n = matrix[0].length;
+
+        int start = 0;
+        int end = m*n - 1;
+        int mid = 0;
+        int midX = 0;
+        int midY = 0;
+        while(start &lt;= end) {
+            mid = (start + end) / 2;
+            midX = mid/n; //除以列数得到所在的行
+            midY = mid%n; //取余数列数得到所在的列
+
+
+            if(matrix[midX][midY] == target) return true;
+            if(matrix[midX][midY] &gt; target) 
+                end = mid - 1;
+            else
+                start = mid + 1;    
+        }
+        return false;
+    }
+}
+</code></pre>
+]]></content>
+  </entry>
+  
+</feed>
