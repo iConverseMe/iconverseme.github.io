@@ -3,7 +3,7 @@ layout: post
 title: "LRUCache"
 date: 2014-11-17 13:48:21 +0800
 comments: true
-categories: 
+categories: algorithm, leetcode 
 ---
 
 # LRU Cache
