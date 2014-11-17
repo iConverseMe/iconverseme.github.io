@@ -1,12 +1,11 @@
 ---
 layout: post
-title: "LRUCache"
+title: "[leetcode] LRUCache"
 date: 2014-11-17 13:48:21 +0800
 comments: true
 categories:  
 ---
 
-# LRU Cache
 [leetcode](https://oj.leetcode.com/problems/lru-cache/)
 
 ### Solution:
