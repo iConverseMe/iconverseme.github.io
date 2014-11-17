@@ -1,0 +1,105 @@
+---
+layout: post
+title: "LRUCache"
+date: 2014-11-17 13:48:21 +0800
+comments: true
+categories: 
+---
+
+# LRU Cache
+[leetcode](https://oj.leetcode.com/problems/lru-cache/)
+
+### Solution:
+Use a double linked list to store the nodes, first one the last used node, and the last one is the least recently used node.
+
+1. each time get a node, should update the node to be the first of the list. And use a map to save the nodes, so get a node, the time complexity is O(1).
+
+2. each time set a node, set into the first of the list.
+
+```
+public class LRUCache {
+    
+    private DoubleLinkedNode head;
+    private DoubleLinkedNode end;
+    private HashMap<Integer, DoubleLinkedNode> map = null;
+    private int capacity;
+    
+    public LRUCache(int capacity) {
+        this.capacity = capacity;
+        head = new DoubleLinkedNode(-1,-1);
+        end = new DoubleLinkedNode(-1,-1);
+        head.next = end;
+        end.pre = head;
+        map = new HashMap<Integer, DoubleLinkedNode>();
+    }
+    
+    // first judge whether there exists in map
+    // if no, return -1
+    // if yes, return the node & update the node to be the first one
+    public int get(int key) {
+        if(map.containsKey(key)) {
+            DoubleLinkedNode node = map.get(key);
+            setNodeFirst(node);
+            return node.val;
+        } else {
+            return -1;
+        }
+    }
+    
+    //set node to the first of the list
+    // should make sure node's pre & next connect well
+    public void setNodeFirst(DoubleLinkedNode node) {
+        if(node.pre != null && node.next != null) { //to new node, its pre&next are null
+            node.pre.next = node.next;
+            node.next.pre = node.pre;
+        }
+        DoubleLinkedNode first = head.next;
+        first.pre = node;
+        node.next = first;
+        node.pre = head;
+        head.next = node;
+    }
+    
+    // if the key is in the map, update the map & set the node to the first
+    // if the key not in the map, insert it as below rules:
+    // if the capacity is not full, just put, and insert the map, update the node to the first
+    // if is full, remove the last one, and remove from hashmap
+    // insert to the first one, insert the map
+    public void set(int key, int value) {
+        if(map.containsKey(key)) {
+            DoubleLinkedNode node = map.get(key);
+            node.val = value;
+            setNodeFirst(node);
+        } else {
+            if(map.size() == capacity) {
+                int nodeKey = removeLast();
+                map.remove(new Integer(nodeKey));
+            } 
+            DoubleLinkedNode newNode = new DoubleLinkedNode(key, value);
+            map.put(key, newNode);
+            setNodeFirst(newNode);
+        }
+    }
+    
+    public int removeLast() {
+        DoubleLinkedNode last = end.pre;
+        last.pre.next = end;
+        end.pre = last.pre;
+        last.next = null;
+        last.pre = null;
+        return last.key;
+    }
+}
+
+class DoubleLinkedNode {
+    int key;
+    int val;
+    DoubleLinkedNode pre;
+    DoubleLinkedNode next;
+
+    public DoubleLinkedNode(int key, int val) {
+        this.key = key;
+        this.val = val;
+    }
+}
+``` 
