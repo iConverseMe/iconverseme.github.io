@@ -3,7 +3,7 @@ layout: post
 title: "[leetcode] Search a 2D Matrix"
 date: 2014-10-22 16:14:52 +0800
 comments: true
-categories: algorithm, leetcode 
+categories:  
 ---
 
 Solution 1: first find the target row, then use binary search find the target number in the row. The target row i must meet matrix[i][0] <= target && target < matrix[i+1][0], or will return the last row.
