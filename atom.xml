@@ -4,7 +4,7 @@
   <title><![CDATA[Hello, I'm ConverseMe]]></title>
   <link href="http://iConverseMe.github.io/atom.xml" rel="self"/>
   <link href="http://iConverseMe.github.io/"/>
-  <updated>2014-11-17T14:08:33+08:00</updated>
+  <updated>2014-11-17T14:10:23+08:00</updated>
   <id>http://iConverseMe.github.io/</id>
   <author>
     <name><![CDATA[ConverseMe]]></name>
@@ -14,13 +14,11 @@
 
   
   <entry>
-    <title type="html"><![CDATA[LRUCache]]></title>
+    <title type="html"><![CDATA[[leetcode] LRUCache]]></title>
     <link href="http://iConverseMe.github.io/blog/2014/11/17/lrucache/"/>
     <updated>2014-11-17T13:48:21+08:00</updated>
     <id>http://iConverseMe.github.io/blog/2014/11/17/lrucache</id>
-    <content type="html"><![CDATA[<h1>LRU Cache</h1>
-
-<p><a href="https://oj.leetcode.com/problems/lru-cache/">leetcode</a></p>
+    <content type="html"><![CDATA[<p><a href="https://oj.leetcode.com/problems/lru-cache/">leetcode</a></p>
 
 <h3>Solution:</h3>
 
