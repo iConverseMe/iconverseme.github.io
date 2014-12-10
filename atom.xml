@@ -4,7 +4,7 @@
   <title><![CDATA[Hello, I'm ConverseMe]]></title>
   <link href="http://iConverseMe.github.io/atom.xml" rel="self"/>
   <link href="http://iConverseMe.github.io/"/>
-  <updated>2014-12-10T18:06:48+08:00</updated>
+  <updated>2014-12-10T18:11:48+08:00</updated>
   <id>http://iConverseMe.github.io/</id>
   <author>
     <name><![CDATA[ConverseMe]]></name>
@@ -18,8 +18,9 @@
     <link href="http://iConverseMe.github.io/blog/2014/12/10/dp-classic-problems/"/>
     <updated>2014-12-10T17:13:52+08:00</updated>
     <id>http://iConverseMe.github.io/blog/2014/12/10/dp-classic-problems</id>
-    <content type="html"><![CDATA[<p><strong>Longest Increasing Substring最长递增子串</strong>
-Give a array of numbers, find the longest increasing numbers in the array, and they are continuous in the array.</p>
+    <content type="html"><![CDATA[<p><strong>Longest Increasing Substring最长递增子串</strong></p>
+
+<p>Give a array of numbers, find the longest increasing numbers in the array, and they are continuous in the array.</p>
 
 <p>use DP solution, define a array int[] dp, and dp[i] means the longest increasing substring length end with num[i], and there exists:</p>
 
@@ -257,8 +258,9 @@ Give a array of numbers, find the longest increasing numbers in the array, and t
 </span><span class='line'>  }</span></code></pre></td></tr></table></div></figure>
 
 
-<p><strong>Longest Common Subsequence最长公共子序列</strong>
-This one is diff from the above, the result can be in-continuous in s or t. Also use dp[i][j] to describe the length of LCS in s[0&hellip;i] and t[0&hellip;j]. And there exists:
+<p><strong>Longest Common Subsequence最长公共子序列</strong></p>
+
+<p>This one is diff from the above, the result can be in-continuous in s or t. Also use dp[i][j] to describe the length of LCS in s[0&hellip;i] and t[0&hellip;j]. And there exists:
 1. when s[i] == t[j], LCS(s[0&hellip;i] &amp; t[0&hellip;j]) = LCS( s[0&hellip;i-1] &amp; t[0&hellip;j-1] ) + s[i]
 2. when s[i] != t[j], LCS(s[0&hellip;i] &amp; t[0&hellip;j]) = LCS( s[0&hellip;i-1] &amp; t[0&hellip;j]) OR LCS( s[0&hellip;i] &amp; t[0&hellip;j-1])
     so in this case, dp[i][j] = max{dp[i-1][j], dp[i][j-1]}</p>
