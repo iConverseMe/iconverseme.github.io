@@ -1,0 +1,488 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>DP classic problems, LIS & LCS  | Hello, I&#8217;m ConverseMe</title>
+
+<meta name="author" content="ConverseMe"> 
+
+<meta name="description" content="Longest Increasing Substring最长递增子串
+Give a array of numbers, find the longest increasing numbers in the array, and they are continuous in the array. &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Hello, I'm ConverseMe" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Hello, I&#8217;m ConverseMe</a></h1>
+<h4>My tech blog.</h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:iConverseMe.github.io">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">DP Classic Problems, LIS & LCS</h2>
+	<div class="entry-content"><p><strong>Longest Increasing Substring最长递增子串</strong>
+Give a array of numbers, find the longest increasing numbers in the array, and they are continuous in the array.</p>
+
+<p>use DP solution, define a array int[] dp, and dp[i] means the longest increasing substring length end with num[i], and there exists:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>dp[i] = dp[i-1] + 1, if num[i] &gt; num[i-1]
+</span><span class='line'>dp[i] = 1, if num[i] &lt;= num[i-1]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If we want to print the nums, we can record the last index of the sub array. Here is the code:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// dp[i] means end with index i, the length of LIS
+</span><span class='line'>  // dp[i] = dp[i-1]+1, num[i] &gt; num[i-1]
+</span><span class='line'>  // dp[i] = 1, num[i] &lt;= num[i-1]
+</span><span class='line'>  public String longestIncresingSubstring(int[] num) {
+</span><span class='line'>      int len = num.length;
+</span><span class='line'>      int[] dp = new int[len];
+</span><span class='line'>      if(len == 0) return "";
+</span><span class='line'>      dp[0] = 1;
+</span><span class='line'>      int max = 1;
+</span><span class='line'>      int endIndex = 0;
+</span><span class='line'>      
+</span><span class='line'>      for(int i = 1; i &lt; len; i ++) {
+</span><span class='line'>          dp[i] = 1;
+</span><span class='line'>          if(num[i] &gt; num[i-1]) {
+</span><span class='line'>              dp[i] += dp[i-1];
+</span><span class='line'>          }
+</span><span class='line'>
+</span><span class='line'>          if(max &lt; dp[i]) {
+</span><span class='line'>              max = dp[i];
+</span><span class='line'>              endIndex = i;
+</span><span class='line'>          }
+</span><span class='line'>      }
+</span><span class='line'>
+</span><span class='line'>      System.out.println("longest incresing substring's length: " + max);
+</span><span class='line'>      StringBuffer sb = new StringBuffer();
+</span><span class='line'>      for(int i = endIndex - max + 1; i &lt;= endIndex; i ++) {
+</span><span class='line'>          sb.append(num[i]).append(",");
+</span><span class='line'>      }
+</span><span class='line'>      return sb.toString();
+</span><span class='line'>  }</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Longest Increasing Subsequence最长递增子序列</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// dp[i] = 1 + max{dp[j], 0 &lt;= j &lt; i && A[i] &gt; A[j]}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Use a map to record the pre index of each index</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public List&lt;Integer&gt; longestIncresingSubsequance(int[] num) {
+</span><span class='line'>      int len = num.length;
+</span><span class='line'>      int[] dp = new int[len];
+</span><span class='line'>      int max = 1;
+</span><span class='line'>      dp[0] = 1;
+</span><span class='line'>      
+</span><span class='line'>      int maxEndIndex = 0;
+</span><span class='line'>      Map&lt;Integer, Integer&gt; preIndexMap = new HashMap&lt;Integer, Integer&gt;();
+</span><span class='line'>      // init the map, set pre index to be itself for each index
+</span><span class='line'>      for(int i = 0; i &lt; len; i ++) {
+</span><span class='line'>          preIndexMap.put(i, i);
+</span><span class='line'>      }
+</span><span class='line'>
+</span><span class='line'>      for(int i = 1; i &lt; len; i ++) {
+</span><span class='line'>          dp[i] = 1;
+</span><span class='line'>          int tmpMax = 0;
+</span><span class='line'>          for(int j = 0; j &lt; i ; j++) {
+</span><span class='line'>              if(num[i] &gt; num[j]) {
+</span><span class='line'>                  if(dp[j] &gt; tmpMax) {
+</span><span class='line'>                      tmpMax = dp[j];
+</span><span class='line'>                      preIndexMap.put(i, j);
+</span><span class='line'>                  }
+</span><span class='line'>              }
+</span><span class='line'>          }
+</span><span class='line'>          dp[i] += tmpMax;
+</span><span class='line'>          
+</span><span class='line'>          if(max &lt; dp[i]) {
+</span><span class='line'>              max = dp[i];
+</span><span class='line'>              maxEndIndex = i;
+</span><span class='line'>          }
+</span><span class='line'>      }
+</span><span class='line'>      
+</span><span class='line'>      System.out.println("longest incresing subsequence's length: " + max);
+</span><span class='line'>      // for maxEndIndex start, total max nums
+</span><span class='line'>      List&lt;Integer&gt; list = new ArrayList&lt;Integer&gt;();
+</span><span class='line'>      while(max &gt; 0) {
+</span><span class='line'>          list.add(num[maxEndIndex]);
+</span><span class='line'>          maxEndIndex = preIndexMap.get(maxEndIndex);
+</span><span class='line'>          max--;
+</span><span class='line'>      }
+</span><span class='line'>      Collections.reverse(list);
+</span><span class='line'>      return list;
+</span><span class='line'>  }</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Longest Common Substring最长公共子串</strong></p>
+
+<p>Find the longest common substring of two strings s1 and s2, and the substring should be continuous in s1 or s2. define a array int[][] dp, and dp[i][j] means the length of LCS for s1[0&hellip;i] and s2[0&hellip;j]. So there exists:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>if s[i] == t[j], dp[i][j] = dp[i-1][j-1]+1
+</span><span class='line'>if s[i] != t[j], dp[i][j] = 0</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And the result is the max of dp[i][j].</p>
+
+<p>If we want to print out the substring, we need a index to record the last index of the substring. Here is the code:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public String getLongestCommonSubstring(String s1, String s2) {
+</span><span class='line'>      int maxLen = 0;
+</span><span class='line'>      int endIndex = 0;
+</span><span class='line'>      int len1 = s1.length();
+</span><span class='line'>      int len2 = s2.length();
+</span><span class='line'>      char[] c1 = s1.toCharArray();
+</span><span class='line'>      char[] c2 = s2.toCharArray();
+</span><span class='line'>
+</span><span class='line'>      int[][] dp = new int[len1+1][len2+1];
+</span><span class='line'>      for(int i = 0; i &lt; len1; i ++) {
+</span><span class='line'>          for(int j = 0; j &lt; len2; j ++) {
+</span><span class='line'>              if(c1[i] == c2[j]) {
+</span><span class='line'>                  dp[i+1][j+1] = dp[i][j] + 1;
+</span><span class='line'>              } else {
+</span><span class='line'>                  dp[i+1][j+1] = 0;
+</span><span class='line'>              }
+</span><span class='line'>              if(maxLen &lt; dp[i+1][j+1]) {
+</span><span class='line'>                  maxLen = dp[i+1][j+1];
+</span><span class='line'>                  endIndex = i;
+</span><span class='line'>              }
+</span><span class='line'>          }
+</span><span class='line'>      }
+</span><span class='line'>
+</span><span class='line'>      System.out.println("longest common substring: " + maxLen);
+</span><span class='line'>      return s1.substring(endIndex-maxLen+1, endIndex+1);
+</span><span class='line'>  }</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Longest Common Subsequence最长公共子序列</strong>
+This one is diff from the above, the result can be in-continuous in s or t. Also use dp[i][j] to describe the length of LCS in s[0&hellip;i] and t[0&hellip;j]. And there exists:
+1. when s[i] == t[j], LCS(s[0&hellip;i] &amp; t[0&hellip;j]) = LCS( s[0&hellip;i-1] &amp; t[0&hellip;j-1] ) + s[i]
+2. when s[i] != t[j], LCS(s[0&hellip;i] &amp; t[0&hellip;j]) = LCS( s[0&hellip;i-1] &amp; t[0&hellip;j]) OR LCS( s[0&hellip;i] &amp; t[0&hellip;j-1])
+    so in this case, dp[i][j] = max{dp[i-1][j], dp[i][j-1]}</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>if s[i] == t[j], dp[i][j] = dp[i-1][j-1]+1
+</span><span class='line'>if s[i] != t[j], dp[i][j] = max{dp[i-1][j], dp[i][j-1]}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And we need list dp array to find the sub sequence, here is the code:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public String getLongestCommonSubsequence(String s1, String s2) {
+</span><span class='line'>      int len1 = s1.length();
+</span><span class='line'>      int len2 = s2.length();
+</span><span class='line'>      char[] c1 = s1.toCharArray();
+</span><span class='line'>      char[] c2 = s2.toCharArray();
+</span><span class='line'>
+</span><span class='line'>      int[][] dp = new int[len1+1][len2+1];
+</span><span class='line'>      for(int i = 0; i &lt; len1; i ++) {
+</span><span class='line'>          for(int j = 0; j &lt; len2; j ++) {
+</span><span class='line'>              if(c1[i] == c2[j]) {
+</span><span class='line'>                  dp[i+1][j+1] = dp[i][j] + 1;
+</span><span class='line'>              } else {
+</span><span class='line'>                  dp[i+1][j+1] = Math.max(dp[i+1][j], dp[i][j+1]);
+</span><span class='line'>              }
+</span><span class='line'>          }
+</span><span class='line'>      }
+</span><span class='line'>
+</span><span class='line'>      int lcsMaxLength = dp[len1][len2];
+</span><span class='line'>      System.out.println("longest common subsequence: " + lcsMaxLength);
+</span><span class='line'>
+</span><span class='line'>      StringBuffer sb = new StringBuffer();
+</span><span class='line'>      int index1 = len1;
+</span><span class='line'>      int index2 = len2;
+</span><span class='line'>      while(index1 &gt; 0 && index2 &gt; 0) {
+</span><span class='line'>          if(c1[index1-1] == c2[index2-1]) {
+</span><span class='line'>              sb.append(c1[index1-1]);
+</span><span class='line'>              index1 --;
+</span><span class='line'>              index2 --;
+</span><span class='line'>          } else if(dp[index1][index2-1] &gt;= dp[index1-1][index2]) {
+</span><span class='line'>              index2 --;
+</span><span class='line'>          } else {
+</span><span class='line'>              index1 --;
+</span><span class='line'>          }
+</span><span class='line'>      } 
+</span><span class='line'>      return sb.reverse().toString();
+</span><span class='line'>  }   </span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-12-10T17:13:52+08:00" pubdate data-updated="true"></time></div>
+	
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> &#8212;>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2014
+
+    ConverseMe
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+</body>
+</html>
