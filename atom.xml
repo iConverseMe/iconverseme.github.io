@@ -4,7 +4,7 @@
   <title><![CDATA[Hello, I'm ConverseMe]]></title>
   <link href="http://iConverseMe.github.io/atom.xml" rel="self"/>
   <link href="http://iConverseMe.github.io/"/>
-  <updated>2014-11-17T14:10:23+08:00</updated>
+  <updated>2014-12-10T13:50:34+08:00</updated>
   <id>http://iConverseMe.github.io/</id>
   <author>
     <name><![CDATA[ConverseMe]]></name>
@@ -12,6 +12,143 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Timeout error in Net::HTTP request in Ruby Api call]]></title>
+    <link href="http://iConverseMe.github.io/blog/2014/12/10/timeout-error-in-net-http-request-in-ruby-api-call/"/>
+    <updated>2014-12-10T13:33:25+08:00</updated>
+    <id>http://iConverseMe.github.io/blog/2014/12/10/timeout-error-in-net-http-request-in-ruby-api-call</id>
+    <content type="html"><![CDATA[<p>I have a api call in Ruby on Rails application, and this call needs a little longer time, about 1min (60s). And I have this error:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[127.0.0.1] [PID-04824] execution expired
+</span><span class='line'>[127.0.0.1] [PID-04824] /opt/converse/ruby/lib/ruby/1.8/timeout.rb:64:in `rbuf_fill'
+</span><span class='line'>/opt/converse/ruby/lib/ruby/1.8/net/protocol.rb:134:in `rbuf_fill'
+</span><span class='line'>/opt/converse/ruby/lib/ruby/1.8/net/protocol.rb:116:in `readuntil'
+</span><span class='line'>/opt/converse/ruby/lib/ruby/1.8/net/protocol.rb:126:in `readline'
+</span><span class='line'>/opt/converse/ruby/lib/ruby/1.8/net/http.rb:2028:in `read_status_line'
+</span><span class='line'>/opt/converse/ruby/lib/ruby/1.8/net/http.rb:2017:in `read_new'
+</span><span class='line'>/opt/converse/ruby/lib/ruby/1.8/net/http.rb:1051:in `request'
+</span><span class='line'>/opt/converse/supadmin/releases/20141118030932/lib/rpm_api_proxy.rb:25:in `network_call'
+</span><span class='line'>/opt/converse/ruby/lib/ruby/1.8/net/http.rb:543:in `start'
+</span><span class='line'>/opt/converse/supadmin/releases/20141118030932/lib/rpm_api_proxy.rb:22:in `network_call'
+</span><span class='line'>/opt/converse/ruby/lib/ruby/1.8/timeout.rb:67:in `timeout'
+</span><span class='line'>/opt/converse/supadmin/releases/20141118030932/lib/rpm_api_proxy.rb:21:in `network_call'
+</span><span class='line'>/opt/converse/supadmin/releases/20141118030932/app/models/network.rb:399:in `enable_rpm'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And my implementation for HTTP request in API call is:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>http_client = Net::HTTP.new(uri.host, uri.port)
+</span><span class='line'>http_client.verify_mode = OpenSSL::SSL::VERIFY_NONE
+</span><span class='line'>http_client.use_ssl = true
+</span><span class='line'>
+</span><span class='line'>timeout = 240
+</span><span class='line'>begin
+</span><span class='line'>  Timeout::timeout(timeout) do
+</span><span class='line'>    http_client.start do |http|
+</span><span class='line'>      req = Net::HTTP::Post.new(url)
+</span><span class='line'>      req.form_data = params
+</span><span class='line'>      resp = http.request(req)
+</span><span class='line'>      Rails.logger.info("resp: #{resp.body}")
+</span><span class='line'>      Rails.logger.info("rpm network call END")
+</span><span class='line'>      JSON.parse(resp.body)
+</span><span class='line'>    end
+</span><span class='line'>  end
+</span><span class='line'>ensure
+</span><span class='line'>  http_client.finish rescue nil
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And the distination needs more than 43s to handle this request, so I&rsquo;ll get the Timeout error.</p>
+
+<p>After searching in the web, I have found <a href="http://userprimary.net/posts/2008/04/13/setting-a-longer-timeout-for-nethttp-requests-in-ruby/">this post</a> is very useful, and fixed my problem based on the solution.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>http_client = Net::HTTP.new(uri.host, uri.port)
+</span><span class='line'>http_client.verify_mode = OpenSSL::SSL::VERIFY_NONE
+</span><span class='line'>http_client.use_ssl = true
+</span><span class='line'>
+</span><span class='line'>timeout = 240
+</span><span class='line'>http_client.read_timeout = timeout
+</span><span class='line'>
+</span><span class='line'>begin
+</span><span class='line'>  Timeout::timeout(timeout) do
+</span><span class='line'>    http_client.start do |http|
+</span><span class='line'>      req = Net::HTTP::Post.new(url)
+</span><span class='line'>      req.form_data = params
+</span><span class='line'>      resp = http.request(req)
+</span><span class='line'>      Rails.logger.info("resp: #{resp.body}")
+</span><span class='line'>      Rails.logger.info("rpm network call END")
+</span><span class='line'>      JSON.parse(resp.body)
+</span><span class='line'>    end
+</span><span class='line'>  end
+</span><span class='line'>ensure
+</span><span class='line'>  http_client.finish rescue nil
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We need to set <strong>read_timeout</strong> for <strong>Net::HTTP</strong> object, because the default <strong>read_timeout</strong> is <strong>60s</strong>. So in my code, the block has set 240s for timeout using <strong>Timeout::timeout(timeout)</strong>, but the <strong>http_client</strong>(in the block) object&rsquo;s timeout time is <strong>60s, the default value</strong>. So I need add the below code to slove this problem.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>http_client.read_timeout = timeout // 240s</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Reference:</strong><a href="http://userprimary.net/posts/2008/04/13/setting-a-longer-timeout-for-nethttp-requests-in-ruby/">Setting a longer timeout for Net::HTTP Requests in Ruby</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[[leetcode] LRUCache]]></title>
