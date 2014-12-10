@@ -6,6 +6,7 @@ comments: true
 categories: 
 ---
 **Longest Increasing Substring最长递增子串**
+
 Give a array of numbers, find the longest increasing numbers in the array, and they are continuous in the array.
 
 use DP solution, define a array int[] dp, and dp[i] means the longest increasing substring length end with num[i], and there exists:
@@ -139,6 +140,7 @@ public String getLongestCommonSubstring(String s1, String s2) {
 ```
 
 **Longest Common Subsequence最长公共子序列**
+
 This one is diff from the above, the result can be in-continuous in s or t. Also use dp[i][j] to describe the length of LCS in s[0...i] and t[0...j]. And there exists:
 1. when s[i] == t[j], LCS(s[0...i] & t[0...j]) = LCS( s[0...i-1] & t[0...j-1] ) + s[i]
 2. when s[i] != t[j], LCS(s[0...i] & t[0...j]) = LCS( s[0...i-1] & t[0...j]) OR LCS( s[0...i] & t[0...j-1])
