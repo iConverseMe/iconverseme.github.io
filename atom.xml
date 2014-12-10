@@ -4,7 +4,7 @@
   <title><![CDATA[Hello, I'm ConverseMe]]></title>
   <link href="http://iConverseMe.github.io/atom.xml" rel="self"/>
   <link href="http://iConverseMe.github.io/"/>
-  <updated>2014-10-22T17:53:24+08:00</updated>
+  <updated>2014-12-10T18:06:48+08:00</updated>
   <id>http://iConverseMe.github.io/</id>
   <author>
     <name><![CDATA[ConverseMe]]></name>
@@ -12,6 +12,672 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[DP classic problems, LIS & LCS]]></title>
+    <link href="http://iConverseMe.github.io/blog/2014/12/10/dp-classic-problems/"/>
+    <updated>2014-12-10T17:13:52+08:00</updated>
+    <id>http://iConverseMe.github.io/blog/2014/12/10/dp-classic-problems</id>
+    <content type="html"><![CDATA[<p><strong>Longest Increasing Substring最长递增子串</strong>
+Give a array of numbers, find the longest increasing numbers in the array, and they are continuous in the array.</p>
+
+<p>use DP solution, define a array int[] dp, and dp[i] means the longest increasing substring length end with num[i], and there exists:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>dp[i] = dp[i-1] + 1, if num[i] &gt; num[i-1]
+</span><span class='line'>dp[i] = 1, if num[i] &lt;= num[i-1]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If we want to print the nums, we can record the last index of the sub array. Here is the code:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// dp[i] means end with index i, the length of LIS
+</span><span class='line'>  // dp[i] = dp[i-1]+1, num[i] &gt; num[i-1]
+</span><span class='line'>  // dp[i] = 1, num[i] &lt;= num[i-1]
+</span><span class='line'>  public String longestIncresingSubstring(int[] num) {
+</span><span class='line'>      int len = num.length;
+</span><span class='line'>      int[] dp = new int[len];
+</span><span class='line'>      if(len == 0) return "";
+</span><span class='line'>      dp[0] = 1;
+</span><span class='line'>      int max = 1;
+</span><span class='line'>      int endIndex = 0;
+</span><span class='line'>      
+</span><span class='line'>      for(int i = 1; i &lt; len; i ++) {
+</span><span class='line'>          dp[i] = 1;
+</span><span class='line'>          if(num[i] &gt; num[i-1]) {
+</span><span class='line'>              dp[i] += dp[i-1];
+</span><span class='line'>          }
+</span><span class='line'>
+</span><span class='line'>          if(max &lt; dp[i]) {
+</span><span class='line'>              max = dp[i];
+</span><span class='line'>              endIndex = i;
+</span><span class='line'>          }
+</span><span class='line'>      }
+</span><span class='line'>
+</span><span class='line'>      System.out.println("longest incresing substring's length: " + max);
+</span><span class='line'>      StringBuffer sb = new StringBuffer();
+</span><span class='line'>      for(int i = endIndex - max + 1; i &lt;= endIndex; i ++) {
+</span><span class='line'>          sb.append(num[i]).append(",");
+</span><span class='line'>      }
+</span><span class='line'>      return sb.toString();
+</span><span class='line'>  }</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Longest Increasing Subsequence最长递增子序列</strong></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// dp[i] = 1 + max{dp[j], 0 &lt;= j &lt; i && A[i] &gt; A[j]}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Use a map to record the pre index of each index</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public List&lt;Integer&gt; longestIncresingSubsequance(int[] num) {
+</span><span class='line'>      int len = num.length;
+</span><span class='line'>      int[] dp = new int[len];
+</span><span class='line'>      int max = 1;
+</span><span class='line'>      dp[0] = 1;
+</span><span class='line'>      
+</span><span class='line'>      int maxEndIndex = 0;
+</span><span class='line'>      Map&lt;Integer, Integer&gt; preIndexMap = new HashMap&lt;Integer, Integer&gt;();
+</span><span class='line'>      // init the map, set pre index to be itself for each index
+</span><span class='line'>      for(int i = 0; i &lt; len; i ++) {
+</span><span class='line'>          preIndexMap.put(i, i);
+</span><span class='line'>      }
+</span><span class='line'>
+</span><span class='line'>      for(int i = 1; i &lt; len; i ++) {
+</span><span class='line'>          dp[i] = 1;
+</span><span class='line'>          int tmpMax = 0;
+</span><span class='line'>          for(int j = 0; j &lt; i ; j++) {
+</span><span class='line'>              if(num[i] &gt; num[j]) {
+</span><span class='line'>                  if(dp[j] &gt; tmpMax) {
+</span><span class='line'>                      tmpMax = dp[j];
+</span><span class='line'>                      preIndexMap.put(i, j);
+</span><span class='line'>                  }
+</span><span class='line'>              }
+</span><span class='line'>          }
+</span><span class='line'>          dp[i] += tmpMax;
+</span><span class='line'>          
+</span><span class='line'>          if(max &lt; dp[i]) {
+</span><span class='line'>              max = dp[i];
+</span><span class='line'>              maxEndIndex = i;
+</span><span class='line'>          }
+</span><span class='line'>      }
+</span><span class='line'>      
+</span><span class='line'>      System.out.println("longest incresing subsequence's length: " + max);
+</span><span class='line'>      // for maxEndIndex start, total max nums
+</span><span class='line'>      List&lt;Integer&gt; list = new ArrayList&lt;Integer&gt;();
+</span><span class='line'>      while(max &gt; 0) {
+</span><span class='line'>          list.add(num[maxEndIndex]);
+</span><span class='line'>          maxEndIndex = preIndexMap.get(maxEndIndex);
+</span><span class='line'>          max--;
+</span><span class='line'>      }
+</span><span class='line'>      Collections.reverse(list);
+</span><span class='line'>      return list;
+</span><span class='line'>  }</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Longest Common Substring最长公共子串</strong></p>
+
+<p>Find the longest common substring of two strings s1 and s2, and the substring should be continuous in s1 or s2. define a array int[][] dp, and dp[i][j] means the length of LCS for s1[0&hellip;i] and s2[0&hellip;j]. So there exists:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>if s[i] == t[j], dp[i][j] = dp[i-1][j-1]+1
+</span><span class='line'>if s[i] != t[j], dp[i][j] = 0</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And the result is the max of dp[i][j].</p>
+
+<p>If we want to print out the substring, we need a index to record the last index of the substring. Here is the code:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public String getLongestCommonSubstring(String s1, String s2) {
+</span><span class='line'>      int maxLen = 0;
+</span><span class='line'>      int endIndex = 0;
+</span><span class='line'>      int len1 = s1.length();
+</span><span class='line'>      int len2 = s2.length();
+</span><span class='line'>      char[] c1 = s1.toCharArray();
+</span><span class='line'>      char[] c2 = s2.toCharArray();
+</span><span class='line'>
+</span><span class='line'>      int[][] dp = new int[len1+1][len2+1];
+</span><span class='line'>      for(int i = 0; i &lt; len1; i ++) {
+</span><span class='line'>          for(int j = 0; j &lt; len2; j ++) {
+</span><span class='line'>              if(c1[i] == c2[j]) {
+</span><span class='line'>                  dp[i+1][j+1] = dp[i][j] + 1;
+</span><span class='line'>              } else {
+</span><span class='line'>                  dp[i+1][j+1] = 0;
+</span><span class='line'>              }
+</span><span class='line'>              if(maxLen &lt; dp[i+1][j+1]) {
+</span><span class='line'>                  maxLen = dp[i+1][j+1];
+</span><span class='line'>                  endIndex = i;
+</span><span class='line'>              }
+</span><span class='line'>          }
+</span><span class='line'>      }
+</span><span class='line'>
+</span><span class='line'>      System.out.println("longest common substring: " + maxLen);
+</span><span class='line'>      return s1.substring(endIndex-maxLen+1, endIndex+1);
+</span><span class='line'>  }</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Longest Common Subsequence最长公共子序列</strong>
+This one is diff from the above, the result can be in-continuous in s or t. Also use dp[i][j] to describe the length of LCS in s[0&hellip;i] and t[0&hellip;j]. And there exists:
+1. when s[i] == t[j], LCS(s[0&hellip;i] &amp; t[0&hellip;j]) = LCS( s[0&hellip;i-1] &amp; t[0&hellip;j-1] ) + s[i]
+2. when s[i] != t[j], LCS(s[0&hellip;i] &amp; t[0&hellip;j]) = LCS( s[0&hellip;i-1] &amp; t[0&hellip;j]) OR LCS( s[0&hellip;i] &amp; t[0&hellip;j-1])
+    so in this case, dp[i][j] = max{dp[i-1][j], dp[i][j-1]}</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>if s[i] == t[j], dp[i][j] = dp[i-1][j-1]+1
+</span><span class='line'>if s[i] != t[j], dp[i][j] = max{dp[i-1][j], dp[i][j-1]}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And we need list dp array to find the sub sequence, here is the code:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public String getLongestCommonSubsequence(String s1, String s2) {
+</span><span class='line'>      int len1 = s1.length();
+</span><span class='line'>      int len2 = s2.length();
+</span><span class='line'>      char[] c1 = s1.toCharArray();
+</span><span class='line'>      char[] c2 = s2.toCharArray();
+</span><span class='line'>
+</span><span class='line'>      int[][] dp = new int[len1+1][len2+1];
+</span><span class='line'>      for(int i = 0; i &lt; len1; i ++) {
+</span><span class='line'>          for(int j = 0; j &lt; len2; j ++) {
+</span><span class='line'>              if(c1[i] == c2[j]) {
+</span><span class='line'>                  dp[i+1][j+1] = dp[i][j] + 1;
+</span><span class='line'>              } else {
+</span><span class='line'>                  dp[i+1][j+1] = Math.max(dp[i+1][j], dp[i][j+1]);
+</span><span class='line'>              }
+</span><span class='line'>          }
+</span><span class='line'>      }
+</span><span class='line'>
+</span><span class='line'>      int lcsMaxLength = dp[len1][len2];
+</span><span class='line'>      System.out.println("longest common subsequence: " + lcsMaxLength);
+</span><span class='line'>
+</span><span class='line'>      StringBuffer sb = new StringBuffer();
+</span><span class='line'>      int index1 = len1;
+</span><span class='line'>      int index2 = len2;
+</span><span class='line'>      while(index1 &gt; 0 && index2 &gt; 0) {
+</span><span class='line'>          if(c1[index1-1] == c2[index2-1]) {
+</span><span class='line'>              sb.append(c1[index1-1]);
+</span><span class='line'>              index1 --;
+</span><span class='line'>              index2 --;
+</span><span class='line'>          } else if(dp[index1][index2-1] &gt;= dp[index1-1][index2]) {
+</span><span class='line'>              index2 --;
+</span><span class='line'>          } else {
+</span><span class='line'>              index1 --;
+</span><span class='line'>          }
+</span><span class='line'>      } 
+</span><span class='line'>      return sb.reverse().toString();
+</span><span class='line'>  }   </span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Timeout error in Net::HTTP request in Ruby Api call]]></title>
+    <link href="http://iConverseMe.github.io/blog/2014/12/10/timeout-error-in-net-http-request-in-ruby-api-call/"/>
+    <updated>2014-12-10T13:33:25+08:00</updated>
+    <id>http://iConverseMe.github.io/blog/2014/12/10/timeout-error-in-net-http-request-in-ruby-api-call</id>
+    <content type="html"><![CDATA[<p>I have a api call in Ruby on Rails application, and this call needs a little longer time, about 1min (60s). And I have this error:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[127.0.0.1] [PID-04824] execution expired
+</span><span class='line'>[127.0.0.1] [PID-04824] /opt/converse/ruby/lib/ruby/1.8/timeout.rb:64:in `rbuf_fill'
+</span><span class='line'>/opt/converse/ruby/lib/ruby/1.8/net/protocol.rb:134:in `rbuf_fill'
+</span><span class='line'>/opt/converse/ruby/lib/ruby/1.8/net/protocol.rb:116:in `readuntil'
+</span><span class='line'>/opt/converse/ruby/lib/ruby/1.8/net/protocol.rb:126:in `readline'
+</span><span class='line'>/opt/converse/ruby/lib/ruby/1.8/net/http.rb:2028:in `read_status_line'
+</span><span class='line'>/opt/converse/ruby/lib/ruby/1.8/net/http.rb:2017:in `read_new'
+</span><span class='line'>/opt/converse/ruby/lib/ruby/1.8/net/http.rb:1051:in `request'
+</span><span class='line'>/opt/converse/supadmin/releases/20141118030932/lib/rpm_api_proxy.rb:25:in `network_call'
+</span><span class='line'>/opt/converse/ruby/lib/ruby/1.8/net/http.rb:543:in `start'
+</span><span class='line'>/opt/converse/supadmin/releases/20141118030932/lib/rpm_api_proxy.rb:22:in `network_call'
+</span><span class='line'>/opt/converse/ruby/lib/ruby/1.8/timeout.rb:67:in `timeout'
+</span><span class='line'>/opt/converse/supadmin/releases/20141118030932/lib/rpm_api_proxy.rb:21:in `network_call'
+</span><span class='line'>/opt/converse/supadmin/releases/20141118030932/app/models/network.rb:399:in `enable_rpm'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And my implementation for HTTP request in API call is:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>http_client = Net::HTTP.new(uri.host, uri.port)
+</span><span class='line'>http_client.verify_mode = OpenSSL::SSL::VERIFY_NONE
+</span><span class='line'>http_client.use_ssl = true
+</span><span class='line'>
+</span><span class='line'>timeout = 240
+</span><span class='line'>begin
+</span><span class='line'>  Timeout::timeout(timeout) do
+</span><span class='line'>    http_client.start do |http|
+</span><span class='line'>      req = Net::HTTP::Post.new(url)
+</span><span class='line'>      req.form_data = params
+</span><span class='line'>      resp = http.request(req)
+</span><span class='line'>      Rails.logger.info("resp: #{resp.body}")
+</span><span class='line'>      Rails.logger.info("rpm network call END")
+</span><span class='line'>      JSON.parse(resp.body)
+</span><span class='line'>    end
+</span><span class='line'>  end
+</span><span class='line'>ensure
+</span><span class='line'>  http_client.finish rescue nil
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And the distination needs more than 43s to handle this request, so I&rsquo;ll get the Timeout error.</p>
+
+<p>After searching in the web, I have found <a href="http://userprimary.net/posts/2008/04/13/setting-a-longer-timeout-for-nethttp-requests-in-ruby/">this post</a> is very useful, and fixed my problem based on the solution.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>http_client = Net::HTTP.new(uri.host, uri.port)
+</span><span class='line'>http_client.verify_mode = OpenSSL::SSL::VERIFY_NONE
+</span><span class='line'>http_client.use_ssl = true
+</span><span class='line'>
+</span><span class='line'>timeout = 240
+</span><span class='line'>http_client.read_timeout = timeout
+</span><span class='line'>
+</span><span class='line'>begin
+</span><span class='line'>  Timeout::timeout(timeout) do
+</span><span class='line'>    http_client.start do |http|
+</span><span class='line'>      req = Net::HTTP::Post.new(url)
+</span><span class='line'>      req.form_data = params
+</span><span class='line'>      resp = http.request(req)
+</span><span class='line'>      Rails.logger.info("resp: #{resp.body}")
+</span><span class='line'>      Rails.logger.info("rpm network call END")
+</span><span class='line'>      JSON.parse(resp.body)
+</span><span class='line'>    end
+</span><span class='line'>  end
+</span><span class='line'>ensure
+</span><span class='line'>  http_client.finish rescue nil
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We need to set <strong>read_timeout</strong> for <strong>Net::HTTP</strong> object, because the default <strong>read_timeout</strong> is <strong>60s</strong>. So in my code, the block has set 240s for timeout using <strong>Timeout::timeout(timeout)</strong>, but the <strong>http_client</strong>(in the block) object&rsquo;s timeout time is <strong>60s, the default value</strong>. So I need add the below code to slove this problem.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>http_client.read_timeout = timeout // 240s</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Reference:</strong><a href="http://userprimary.net/posts/2008/04/13/setting-a-longer-timeout-for-nethttp-requests-in-ruby/">Setting a longer timeout for Net::HTTP Requests in Ruby</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[[leetcode] LRUCache]]></title>
+    <link href="http://iConverseMe.github.io/blog/2014/11/17/lrucache/"/>
+    <updated>2014-11-17T13:48:21+08:00</updated>
+    <id>http://iConverseMe.github.io/blog/2014/11/17/lrucache</id>
+    <content type="html"><![CDATA[<p><a href="https://oj.leetcode.com/problems/lru-cache/">leetcode</a></p>
+
+<h3>Solution:</h3>
+
+<p>Use a double linked list to store the nodes, first one the last used node, and the last one is the least recently used node.</p>
+
+<ol>
+<li><p>each time get a node, should update the node to be the first of the list. And use a map to save the nodes, so get a node, the time complexity is O(1).</p></li>
+<li><p>each time set a node, set into the first of the list.</p></li>
+</ol>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public class LRUCache {
+</span><span class='line'>    
+</span><span class='line'>    private DoubleLinkedNode head;
+</span><span class='line'>    private DoubleLinkedNode end;
+</span><span class='line'>    private HashMap&lt;Integer, DoubleLinkedNode&gt; map = null;
+</span><span class='line'>    private int capacity;
+</span><span class='line'>    
+</span><span class='line'>    public LRUCache(int capacity) {
+</span><span class='line'>        this.capacity = capacity;
+</span><span class='line'>        head = new DoubleLinkedNode(-1,-1);
+</span><span class='line'>        end = new DoubleLinkedNode(-1,-1);
+</span><span class='line'>        head.next = end;
+</span><span class='line'>        end.pre = head;
+</span><span class='line'>        map = new HashMap&lt;Integer, DoubleLinkedNode&gt;();
+</span><span class='line'>    }
+</span><span class='line'>    
+</span><span class='line'>    // first judge whether there exists in map
+</span><span class='line'>    // if no, return -1
+</span><span class='line'>    // if yes, return the node & update the node to be the first one
+</span><span class='line'>    public int get(int key) {
+</span><span class='line'>        if(map.containsKey(key)) {
+</span><span class='line'>            DoubleLinkedNode node = map.get(key);
+</span><span class='line'>            setNodeFirst(node);
+</span><span class='line'>            return node.val;
+</span><span class='line'>        } else {
+</span><span class='line'>            return -1;
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>    
+</span><span class='line'>    //set node to the first of the list
+</span><span class='line'>    // should make sure node's pre & next connect well
+</span><span class='line'>    public void setNodeFirst(DoubleLinkedNode node) {
+</span><span class='line'>        if(node.pre != null && node.next != null) { //to new node, its pre&next are null
+</span><span class='line'>            node.pre.next = node.next;
+</span><span class='line'>            node.next.pre = node.pre;
+</span><span class='line'>        }
+</span><span class='line'>        DoubleLinkedNode first = head.next;
+</span><span class='line'>        first.pre = node;
+</span><span class='line'>        node.next = first;
+</span><span class='line'>        node.pre = head;
+</span><span class='line'>        head.next = node;
+</span><span class='line'>    }
+</span><span class='line'>    
+</span><span class='line'>    // if the key is in the map, update the map & set the node to the first
+</span><span class='line'>    // if the key not in the map, insert it as below rules:
+</span><span class='line'>    // if the capacity is not full, just put, and insert the map, update the node to the first
+</span><span class='line'>    // if is full, remove the last one, and remove from hashmap
+</span><span class='line'>    // insert to the first one, insert the map
+</span><span class='line'>    public void set(int key, int value) {
+</span><span class='line'>        if(map.containsKey(key)) {
+</span><span class='line'>            DoubleLinkedNode node = map.get(key);
+</span><span class='line'>            node.val = value;
+</span><span class='line'>            setNodeFirst(node);
+</span><span class='line'>        } else {
+</span><span class='line'>            if(map.size() == capacity) {
+</span><span class='line'>                int nodeKey = removeLast();
+</span><span class='line'>                map.remove(new Integer(nodeKey));
+</span><span class='line'>            } 
+</span><span class='line'>            DoubleLinkedNode newNode = new DoubleLinkedNode(key, value);
+</span><span class='line'>            map.put(key, newNode);
+</span><span class='line'>            setNodeFirst(newNode);
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>    
+</span><span class='line'>    public int removeLast() {
+</span><span class='line'>        DoubleLinkedNode last = end.pre;
+</span><span class='line'>        last.pre.next = end;
+</span><span class='line'>        end.pre = last.pre;
+</span><span class='line'>        last.next = null;
+</span><span class='line'>        last.pre = null;
+</span><span class='line'>        return last.key;
+</span><span class='line'>    }
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>class DoubleLinkedNode {
+</span><span class='line'>    int key;
+</span><span class='line'>    int val;
+</span><span class='line'>    DoubleLinkedNode pre;
+</span><span class='line'>    DoubleLinkedNode next;
+</span><span class='line'>
+</span><span class='line'>    public DoubleLinkedNode(int key, int val) {
+</span><span class='line'>        this.key = key;
+</span><span class='line'>        this.val = val;
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[[leetcode] Search a 2D Matrix]]></title>
