@@ -1,0 +1,284 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>Find the Lowest Common Ancestor for Two Nodes in Binary Tree  | Hello, I&#8217;m ConverseMe</title>
+
+<meta name="author" content="ConverseMe"> 
+
+<meta name="description" content="Find the Lowest Common Ancestor for two TreeNodes in Binary Tree is a very common question, called LCA problem. For binary tree root, find the LCA of &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Hello, I'm ConverseMe" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Hello, I&#8217;m ConverseMe</a></h1>
+<h4>My tech blog.</h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:iConverseMe.github.io">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Find the Lowest Common Ancestor for Two Nodes in Binary Tree</h2>
+	<div class="entry-content"><p>Find the Lowest Common Ancestor for two TreeNodes in Binary Tree is a very common question, called LCA problem.</p>
+
+<p>For binary tree root, find the LCA of k1 &amp; k2.</p>
+
+<p><strong>Solition 1:</strong> The basic solution is use two list to save the path from root to k1, and the path from root to k2, then compare the two lists. I have implement this use stack instead of list, for stack is First-In-Last-Out, so the first common node is the LCA of k1 &amp; k2 when pop the nodes.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public boolean findPath(TreeNode root, int val, Stack&lt;Integer&gt; s) {
+</span><span class='line'>      if(root == null) return false;
+</span><span class='line'>      if(root.val == val) return true;
+</span><span class='line'>      s.push(root.val);
+</span><span class='line'>
+</span><span class='line'>      if((root.left && findPath(root.left, val, s)) || (root.right && findPath(root.right, val, s)))
+</span><span class='line'>          return true;
+</span><span class='line'>      return false;
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>// use two stacks to save the path root -&gt; node
+</span><span class='line'>// output stack s1 & s2, the first common node
+</span><span class='line'>// return the first common node
+</span><span class='line'>public int findLastestCommon(TreeNode root, TreeNode p, TreeNode q) {
+</span><span class='line'>      Stack&lt;Integer&gt; s1 = new Stack&lt;Integer&gt;();
+</span><span class='line'>      Stack&lt;Integer&gt; s2 = new Stack&lt;Integer&gt;();
+</span><span class='line'>
+</span><span class='line'>      findPath(root, p.val, s1);
+</span><span class='line'>      findPath(root, q.val, s2);
+</span><span class='line'>
+</span><span class='line'>      while(!s1.isEmpty() && !s2.isEmpty()) {
+</span><span class='line'>          int k1 = s1.pop();
+</span><span class='line'>          int k2 = s2.pop();
+</span><span class='line'>          if(k1 == k2) {
+</span><span class='line'>              return k1;
+</span><span class='line'>          }
+</span><span class='line'>      }
+</span><span class='line'>      return -1;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Solution 2:</strong> Recursively find the LCA of k1 &amp; k2, if they two exist diff LCA, so return root. If there exists k1 == root.val or k2 == root.val, the LCA of k1 &amp; k2 is root absolutely.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// value k1 & k2 compare with root
+</span><span class='line'>// if k1 == root or k2 == root, return root
+</span><span class='line'>public TreeNode findLCA(TreeNode root, int k1, int k2) {
+</span><span class='line'>      if(root == null) return root;
+</span><span class='line'>      if(root.val == k1 || root.val == k2) return root;
+</span><span class='line'>      
+</span><span class='line'>      TreeNode left = findLCA(root.left, k1, k2);
+</span><span class='line'>      TreeNode right = findLCA(root.right, k1, k2);
+</span><span class='line'>      
+</span><span class='line'>      if(left != null && right != null) return root;
+</span><span class='line'>      return left == null ? right : left;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>For solution 2, when the tree is Binary Search Tree(BST), we can first check when k1 &amp; k2 are in the same tree(left tree or right tree), if they are in different sub-tree, the LCA of k1 &amp; k2 is root absolutely.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// find node k1 & k2's lowest common ancestor
+</span><span class='line'>// if k1 & k2 both bigger than root, the LCA is in the right tree
+</span><span class='line'>// if k1 & k2 both less than root, the LCA is in the left tree
+</span><span class='line'>public TreeNode findLCAinBST(TreeNode root, TreeNode k1, TreeNode k2) {
+</span><span class='line'>      if(root == null) return root;
+</span><span class='line'>      if(k1 == null || k2 == null) return root;
+</span><span class='line'>      
+</span><span class='line'>      if(k1.val &lt; root.val && k2.val &lt; root.val) 
+</span><span class='line'>          return findLCAinBST(root.left, k1, k2);
+</span><span class='line'>
+</span><span class='line'>      if(k1.val &gt; root.val && k2.val &gt; root.val) 
+</span><span class='line'>          return findLCAinBST(root.left, k1, k2);
+</span><span class='line'>      return root;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-12-11T22:34:40+08:00" pubdate data-updated="true"></time></div>
+	
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> &#8212;>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2014
+
+    ConverseMe
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+</body>
+</html>

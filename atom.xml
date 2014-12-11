@@ -4,7 +4,7 @@
   <title><![CDATA[Hello, I'm ConverseMe]]></title>
   <link href="http://iConverseMe.github.io/atom.xml" rel="self"/>
   <link href="http://iConverseMe.github.io/"/>
-  <updated>2014-12-10T18:11:48+08:00</updated>
+  <updated>2014-12-11T22:47:21+08:00</updated>
   <id>http://iConverseMe.github.io/</id>
   <author>
     <name><![CDATA[ConverseMe]]></name>
@@ -12,6 +12,139 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Find the Lowest Common Ancestor for Two Nodes in Binary Tree]]></title>
+    <link href="http://iConverseMe.github.io/blog/2014/12/11/find-the-lowest-common-ancestor-for-two-nodes-in-binary-tree/"/>
+    <updated>2014-12-11T22:34:40+08:00</updated>
+    <id>http://iConverseMe.github.io/blog/2014/12/11/find-the-lowest-common-ancestor-for-two-nodes-in-binary-tree</id>
+    <content type="html"><![CDATA[<p>Find the Lowest Common Ancestor for two TreeNodes in Binary Tree is a very common question, called LCA problem.</p>
+
+<p>For binary tree root, find the LCA of k1 &amp; k2.</p>
+
+<p><strong>Solition 1:</strong> The basic solution is use two list to save the path from root to k1, and the path from root to k2, then compare the two lists. I have implement this use stack instead of list, for stack is First-In-Last-Out, so the first common node is the LCA of k1 &amp; k2 when pop the nodes.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public boolean findPath(TreeNode root, int val, Stack&lt;Integer&gt; s) {
+</span><span class='line'>      if(root == null) return false;
+</span><span class='line'>      if(root.val == val) return true;
+</span><span class='line'>      s.push(root.val);
+</span><span class='line'>
+</span><span class='line'>      if((root.left && findPath(root.left, val, s)) || (root.right && findPath(root.right, val, s)))
+</span><span class='line'>          return true;
+</span><span class='line'>      return false;
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>// use two stacks to save the path root -&gt; node
+</span><span class='line'>// output stack s1 & s2, the first common node
+</span><span class='line'>// return the first common node
+</span><span class='line'>public int findLastestCommon(TreeNode root, TreeNode p, TreeNode q) {
+</span><span class='line'>      Stack&lt;Integer&gt; s1 = new Stack&lt;Integer&gt;();
+</span><span class='line'>      Stack&lt;Integer&gt; s2 = new Stack&lt;Integer&gt;();
+</span><span class='line'>
+</span><span class='line'>      findPath(root, p.val, s1);
+</span><span class='line'>      findPath(root, q.val, s2);
+</span><span class='line'>
+</span><span class='line'>      while(!s1.isEmpty() && !s2.isEmpty()) {
+</span><span class='line'>          int k1 = s1.pop();
+</span><span class='line'>          int k2 = s2.pop();
+</span><span class='line'>          if(k1 == k2) {
+</span><span class='line'>              return k1;
+</span><span class='line'>          }
+</span><span class='line'>      }
+</span><span class='line'>      return -1;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Solution 2:</strong> Recursively find the LCA of k1 &amp; k2, if they two exist diff LCA, so return root. If there exists k1 == root.val or k2 == root.val, the LCA of k1 &amp; k2 is root absolutely.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// value k1 & k2 compare with root
+</span><span class='line'>// if k1 == root or k2 == root, return root
+</span><span class='line'>public TreeNode findLCA(TreeNode root, int k1, int k2) {
+</span><span class='line'>      if(root == null) return root;
+</span><span class='line'>      if(root.val == k1 || root.val == k2) return root;
+</span><span class='line'>      
+</span><span class='line'>      TreeNode left = findLCA(root.left, k1, k2);
+</span><span class='line'>      TreeNode right = findLCA(root.right, k1, k2);
+</span><span class='line'>      
+</span><span class='line'>      if(left != null && right != null) return root;
+</span><span class='line'>      return left == null ? right : left;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>For solution 2, when the tree is Binary Search Tree(BST), we can first check when k1 &amp; k2 are in the same tree(left tree or right tree), if they are in different sub-tree, the LCA of k1 &amp; k2 is root absolutely.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// find node k1 & k2's lowest common ancestor
+</span><span class='line'>// if k1 & k2 both bigger than root, the LCA is in the right tree
+</span><span class='line'>// if k1 & k2 both less than root, the LCA is in the left tree
+</span><span class='line'>public TreeNode findLCAinBST(TreeNode root, TreeNode k1, TreeNode k2) {
+</span><span class='line'>      if(root == null) return root;
+</span><span class='line'>      if(k1 == null || k2 == null) return root;
+</span><span class='line'>      
+</span><span class='line'>      if(k1.val &lt; root.val && k2.val &lt; root.val) 
+</span><span class='line'>          return findLCAinBST(root.left, k1, k2);
+</span><span class='line'>
+</span><span class='line'>      if(k1.val &gt; root.val && k2.val &gt; root.val) 
+</span><span class='line'>          return findLCAinBST(root.left, k1, k2);
+</span><span class='line'>      return root;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[DP classic problems, LIS & LCS]]></title>
