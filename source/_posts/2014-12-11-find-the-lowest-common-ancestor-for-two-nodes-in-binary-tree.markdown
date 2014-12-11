@@ -38,7 +38,7 @@ public int findLastestCommon(TreeNode root, TreeNode p, TreeNode q) {
 				return k1;
 			}
 		}
-		return -1;
+		return root.val;
 }
 ```
 
