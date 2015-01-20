@@ -4,7 +4,7 @@
   <title><![CDATA[Hello, I'm ConverseMe]]></title>
   <link href="http://iConverseMe.github.io/atom.xml" rel="self"/>
   <link href="http://iConverseMe.github.io/"/>
-  <updated>2014-12-11T22:54:10+08:00</updated>
+  <updated>2015-01-20T17:40:08+08:00</updated>
   <id>http://iConverseMe.github.io/</id>
   <author>
     <name><![CDATA[ConverseMe]]></name>
@@ -12,6 +12,144 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Running Median / Median of Integer Stream]]></title>
+    <link href="http://iConverseMe.github.io/blog/2015/01/20/running-median-slash-median-of-integer-stream/"/>
+    <updated>2015-01-20T16:48:18+08:00</updated>
+    <id>http://iConverseMe.github.io/blog/2015/01/20/running-median-slash-median-of-integer-stream</id>
+    <content type="html"><![CDATA[<p><strong>Source</strong></p>
+
+<p><a href="http://lintcode.com/en/problem/median-ii/#">Median II</a></p>
+
+<p><strong>Problem</strong></p>
+
+<p>Numbers keep coming, return the median of numbers at every time a new number added.</p>
+
+<p><strong>Example</strong></p>
+
+<p>For numbers coming list: [1, 2, 3, 4, 5], return [1, 1, 2, 2, 3]</p>
+
+<p>For numbers coming list: [4, 5, 1, 3, 2, 6, 0], return [4, 4, 4, 3, 3, 3, 3]</p>
+
+<p>For numbers coming list: [2, 20, 100], return [2, 2, 20]</p>
+
+<p><strong>Challenge</strong></p>
+
+<p>O(nlogn) time</p>
+
+<p><strong>Clarification</strong></p>
+
+<p>What&rsquo;s the definition of Median?</p>
+
+<p>Median is the number that in the middle of a sorted array. If there are n numbers in a sorted array A, the median is A[(n-1)/2].
+For example, if A=[1,2,3], median is 2. If A=[1,19], median is 1.</p>
+
+<p><strong>Solution</strong></p>
+
+<p>Use two heaps, a max heap and a min heap, for an integer i, if i smaller than the root of max heap, insert it to the max heap, or insert it to the min heap. Make sure the two requirements:</p>
+
+<ol>
+<li>elements in max heap &lt;= elements in min heap</li>
+<li>|sizeOf(max heap) - sizeOf(min heap)| &lt;= 1</li>
+</ol>
+
+
+<p>Insert element and rejudge the heap needs O(lgn) time, and get median takes O(1) time.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public class Solution {
+</span><span class='line'>    /**
+</span><span class='line'>     * @param nums: A list of integers.
+</span><span class='line'>     * @return: the median of numbers
+</span><span class='line'>     */
+</span><span class='line'>    public int[] medianII(int[] nums) {
+</span><span class='line'>        // write your code here
+</span><span class='line'>        PriorityQueue&lt;Integer&gt; upperQueue = new PriorityQueue&lt;Integer&gt;();
+</span><span class='line'>        PriorityQueue&lt;Integer&gt; lowerQueue = new PriorityQueue&lt;Integer&gt;(20,new Comparator&lt;Integer&gt;(){
+</span><span class='line'>          public int compare(Integer o1, Integer o2) {
+</span><span class='line'>              return -o1.compareTo(o2);
+</span><span class='line'>          }
+</span><span class='line'>        });
+</span><span class='line'>        
+</span><span class='line'>        //elements in upperQueue &lt;= elememts in lowerQueue
+</span><span class='line'>        upperQueue.add(Integer.MAX_VALUE);
+</span><span class='line'>        lowerQueue.add(Integer.MIN_VALUE);
+</span><span class='line'>        int[] median = new int[nums.length];
+</span><span class='line'>        for(int i = 0; i &lt; nums.length; i ++) {
+</span><span class='line'>            if(nums[i] &gt;= lowerQueue.peek()) {
+</span><span class='line'>                upperQueue.add(nums[i]);
+</span><span class='line'>            } else {
+</span><span class='line'>                lowerQueue.add(nums[i]);
+</span><span class='line'>            }
+</span><span class='line'>            //load balance
+</span><span class='line'>            if(lowerQueue.size() - upperQueue.size() == 2) {
+</span><span class='line'>                upperQueue.add(lowerQueue.poll());
+</span><span class='line'>            } else if(upperQueue.size() - lowerQueue.size() == 2) {
+</span><span class='line'>                lowerQueue.add(upperQueue.poll());
+</span><span class='line'>            }
+</span><span class='line'>            if(lowerQueue.size() == upperQueue.size()) {
+</span><span class='line'>                // median[i] = (lowerQueue.peek() + upperQueue.peek())/2;
+</span><span class='line'>                median[i] = lowerQueue.peek();
+</span><span class='line'>            } else if(lowerQueue.size() &gt; upperQueue.size()) {
+</span><span class='line'>                median[i] = lowerQueue.peek();
+</span><span class='line'>            } else {
+</span><span class='line'>                median[i] = upperQueue.peek();   
+</span><span class='line'>            }
+</span><span class='line'>        }
+</span><span class='line'>        return median;
+</span><span class='line'>    }
+</span><span class='line'>}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Reference</strong></p>
+
+<p><a href="http://www.dsalgo.com/2013/02/RunningMedian.php.html">http://www.dsalgo.com/2013/02/RunningMedian.php.html</a>
+<a href="http://www.ardendertat.com/2011/11/03/programming-interview-questions-13-median-of-integer-stream/">http://www.ardendertat.com/2011/11/03/programming-interview-questions-13-median-of-integer-stream/</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Find the Lowest Common Ancestor for Two Nodes in Binary Tree]]></title>
