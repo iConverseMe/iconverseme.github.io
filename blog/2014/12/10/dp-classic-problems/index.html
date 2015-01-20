@@ -9,8 +9,7 @@
 
 <meta name="author" content="ConverseMe"> 
 
-<meta name="description" content="Longest Increasing Substring最长递增子串
-Give a array of numbers, find the longest increasing numbers in the array, and they are continuous in the array. &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="Longest Increasing Substring最长递增子串 Give a array of numbers, find the longest increasing numbers in the array, and they are continuous in the array. &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -99,8 +98,9 @@ $(document).ready(
 
 	<div id="content" class="inner"><article class="post">
 	<h2 class="title">DP Classic Problems, LIS & LCS</h2>
-	<div class="entry-content"><p><strong>Longest Increasing Substring最长递增子串</strong>
-Give a array of numbers, find the longest increasing numbers in the array, and they are continuous in the array.</p>
+	<div class="entry-content"><p><strong>Longest Increasing Substring最长递增子串</strong></p>
+
+<p>Give a array of numbers, find the longest increasing numbers in the array, and they are continuous in the array.</p>
 
 <p>use DP solution, define a array int[] dp, and dp[i] means the longest increasing substring length end with num[i], and there exists:</p>
 
@@ -338,8 +338,9 @@ Give a array of numbers, find the longest increasing numbers in the array, and t
 </span><span class='line'>  }</span></code></pre></td></tr></table></div></figure>
 
 
-<p><strong>Longest Common Subsequence最长公共子序列</strong>
-This one is diff from the above, the result can be in-continuous in s or t. Also use dp[i][j] to describe the length of LCS in s[0&hellip;i] and t[0&hellip;j]. And there exists:
+<p><strong>Longest Common Subsequence最长公共子序列</strong></p>
+
+<p>This one is diff from the above, the result can be in-continuous in s or t. Also use dp[i][j] to describe the length of LCS in s[0&hellip;i] and t[0&hellip;j]. And there exists:
 1. when s[i] == t[j], LCS(s[0&hellip;i] &amp; t[0&hellip;j]) = LCS( s[0&hellip;i-1] &amp; t[0&hellip;j-1] ) + s[i]
 2. when s[i] != t[j], LCS(s[0&hellip;i] &amp; t[0&hellip;j]) = LCS( s[0&hellip;i-1] &amp; t[0&hellip;j]) OR LCS( s[0&hellip;i] &amp; t[0&hellip;j-1])
     so in this case, dp[i][j] = max{dp[i-1][j], dp[i][j-1]}</p>
@@ -464,7 +465,7 @@ This one is diff from the above, the result can be in-continuous in s or t. Also
 
 
 </div>
-	<footer id="footer" class="inner">Copyright &copy; 2014
+	<footer id="footer" class="inner">Copyright &copy; 2015
 
     ConverseMe
 
