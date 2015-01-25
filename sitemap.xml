@@ -31,27 +31,33 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>http://iConverseMe.github.io/blog/archives/</loc>
-    <lastmod>2015-01-20T17:43:15+08:00</lastmod>
+    <loc>http://iConverseMe.github.io/blog/</loc>
+    <lastmod>2015-01-25T15:54:44+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>http://iConverseMe.github.io/archives/</loc>
-    <lastmod>2015-01-20T17:43:15+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>http://iConverseMe.github.io/blog/</loc>
-    <lastmod>2015-01-20T17:43:15+08:00</lastmod>
+    <lastmod>2015-01-25T15:54:44+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>http://iConverseMe.github.io/</loc>
-    <lastmod>2015-01-20T17:43:15+08:00</lastmod>
+    <lastmod>2015-01-25T15:54:44+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>http://iConverseMe.github.io/blog/archives/</loc>
+    <lastmod>2015-01-25T15:54:44+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://iConverseMe.github.io/about/</loc>
+    <lastmod>2015-01-25T15:54:44+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
   </url>
 </urlset>
