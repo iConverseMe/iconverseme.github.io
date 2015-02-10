@@ -1,0 +1,391 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>[LeetCode] Binary Search Tree Iterator  | Hello, I&#8217;m ConverseMe</title>
+
+<meta name="author" content="ConverseMe"> 
+
+<meta name="description" content="Problem Implement an iterator over a binary search tree(BST). Your iterator will be initialized with the root node of a BST.
+Calling next() will &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Hello, I'm ConverseMe" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Hello, I&#8217;m ConverseMe</a></h1>
+<h4>My tech blog.</h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:iConverseMe.github.io">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">[LeetCode] Binary Search Tree Iterator</h2>
+	<div class="entry-content"><p><strong>Problem</strong></p>
+
+<p>Implement an iterator over a binary search tree(BST). Your iterator will be initialized with the root node of a BST.
+Calling next() will return the next smallest number in the BST.
+<a href="https://oj.leetcode.com/problems/binary-search-tree-iterator/">here</a></p>
+
+<p><strong>Solution</strong></p>
+
+<ol>
+<li>use a list to save inorder nodes of the tree, and a index point to get the next element. Time complexity for next() &amp; hasNext() is O(1), space complexity is O(n), n is count of tree nodes.</li>
+</ol>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public class Solution1 {
+</span><span class='line'>    //use a list to save all the nodes of the tree with inorder
+</span><span class='line'>    //space complexity is O(n), and time complexity is O(1)
+</span><span class='line'>    private List&lt;TreeNode&gt; list = null;
+</span><span class='line'>    private int counter = 0;
+</span><span class='line'>    private int len = 0;
+</span><span class='line'>    
+</span><span class='line'>    //@param root: The root of binary tree.
+</span><span class='line'>    public Solution(TreeNode root) {
+</span><span class='line'>        list = new ArrayList&lt;TreeNode&gt;();
+</span><span class='line'>        inorder(root, list);
+</span><span class='line'>        len = list.size();
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    private void inorder(TreeNode root, List&lt;TreeNode&gt; list) {
+</span><span class='line'>        if(root == null) return;
+</span><span class='line'>        inorder(root.left, list);
+</span><span class='line'>        list.add(root);
+</span><span class='line'>        inorder(root.right, list);
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    //@return: True if there has next node, or false
+</span><span class='line'>    public boolean hasNext() {
+</span><span class='line'>        return counter &lt; len;
+</span><span class='line'>    }
+</span><span class='line'>    
+</span><span class='line'>    //@return: return next node
+</span><span class='line'>    public TreeNode next() {
+</span><span class='line'>        if(hasNext()) {
+</span><span class='line'>            return list.get(counter++);
+</span><span class='line'>        }
+</span><span class='line'>        return null;
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>use a stack, the top of the stack is the next smallest, and each time pop up the top element, push the node&rsquo;s right child&rsquo;s left -> left &ndash;> leftest node to stack. Time complexity is O(1), space complexity is O(lgn). lgn is the height of the tree.</li>
+</ol>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public class Solution {
+</span><span class='line'>    
+</span><span class='line'>    //use a stack, the thought of inorder
+</span><span class='line'>    //space complexity is O(lgn)
+</span><span class='line'>    private Stack&lt;TreeNode&gt; stack = null;
+</span><span class='line'>    private TreeNode current = null;
+</span><span class='line'>    
+</span><span class='line'>    //@param root: The root of binary tree.
+</span><span class='line'>    public Solution(TreeNode root) {
+</span><span class='line'>        stack = new Stack&lt;TreeNode&gt;();
+</span><span class='line'>        current = root;
+</span><span class='line'>        while(current != null) {
+</span><span class='line'>            stack.push(current);
+</span><span class='line'>            current = current.left;
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    //@return: True if there has next node, or false
+</span><span class='line'>    public boolean hasNext() {
+</span><span class='line'>        return !stack.isEmpty() || current != null;
+</span><span class='line'>    }
+</span><span class='line'>    
+</span><span class='line'>    
+</span><span class='line'>    //return the top of the stack, and put the top's right's left nodes to the stack
+</span><span class='line'>    //@return: return next node
+</span><span class='line'>    public TreeNode next() {
+</span><span class='line'>        TreeNode node = stack.pop();
+</span><span class='line'>        if(node != null) {
+</span><span class='line'>            current = node.right;
+</span><span class='line'>            while(current != null) {
+</span><span class='line'>                stack.push(current);
+</span><span class='line'>                current = current.left;
+</span><span class='line'>            }
+</span><span class='line'>        }
+</span><span class='line'>        return node;
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The Solution is the same as implementing inorder iteratively. Another way to inplement this.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public class Solution {
+</span><span class='line'>    
+</span><span class='line'>    //use a stack, the thought of inorder
+</span><span class='line'>    //space complexity is O(lgn)
+</span><span class='line'>    private Stack&lt;TreeNode&gt; stack = null;
+</span><span class='line'>    private TreeNode current = null;
+</span><span class='line'>    
+</span><span class='line'>    //@param root: The root of binary tree.
+</span><span class='line'>    public Solution(TreeNode root) {
+</span><span class='line'>        stack = new Stack&lt;TreeNode&gt;();
+</span><span class='line'>        current = root;
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    //@return: True if there has next node, or false
+</span><span class='line'>    public boolean hasNext() {
+</span><span class='line'>        return !stack.isEmpty() || current != null;
+</span><span class='line'>    }
+</span><span class='line'>    
+</span><span class='line'>    
+</span><span class='line'>    //when get the next node, first check current node's left nodes are in the stack
+</span><span class='line'>    //@return: return next node
+</span><span class='line'>    public TreeNode next() {
+</span><span class='line'>        while(current != null) {
+</span><span class='line'>            stack.push(current);
+</span><span class='line'>            current = current.left;
+</span><span class='line'>        }
+</span><span class='line'>        TreeNode node = stack.pop();
+</span><span class='line'>        current = node.right;
+</span><span class='line'>        return node;
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-02-10T17:35:01+08:00" pubdate data-updated="true"></time></div>
+	
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> &#8212;>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2015
+
+    ConverseMe
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+</body>
+</html>

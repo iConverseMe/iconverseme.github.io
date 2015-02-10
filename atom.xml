@@ -4,7 +4,7 @@
   <title><![CDATA[Hello, I'm ConverseMe]]></title>
   <link href="http://iConverseMe.github.io/atom.xml" rel="self"/>
   <link href="http://iConverseMe.github.io/"/>
-  <updated>2015-01-25T15:54:44+08:00</updated>
+  <updated>2015-02-10T17:59:56+08:00</updated>
   <id>http://iConverseMe.github.io/</id>
   <author>
     <name><![CDATA[ConverseMe]]></name>
@@ -12,6 +12,245 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[[LeetCode] Binary Search Tree Iterator]]></title>
+    <link href="http://iConverseMe.github.io/blog/2015/02/10/binary-search-tree-iterator/"/>
+    <updated>2015-02-10T17:35:01+08:00</updated>
+    <id>http://iConverseMe.github.io/blog/2015/02/10/binary-search-tree-iterator</id>
+    <content type="html"><![CDATA[<p><strong>Problem</strong></p>
+
+<p>Implement an iterator over a binary search tree(BST). Your iterator will be initialized with the root node of a BST.
+Calling next() will return the next smallest number in the BST.
+<a href="https://oj.leetcode.com/problems/binary-search-tree-iterator/">here</a></p>
+
+<p><strong>Solution</strong></p>
+
+<ol>
+<li>use a list to save inorder nodes of the tree, and a index point to get the next element. Time complexity for next() &amp; hasNext() is O(1), space complexity is O(n), n is count of tree nodes.</li>
+</ol>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public class Solution1 {
+</span><span class='line'>    //use a list to save all the nodes of the tree with inorder
+</span><span class='line'>    //space complexity is O(n), and time complexity is O(1)
+</span><span class='line'>    private List&lt;TreeNode&gt; list = null;
+</span><span class='line'>    private int counter = 0;
+</span><span class='line'>    private int len = 0;
+</span><span class='line'>    
+</span><span class='line'>    //@param root: The root of binary tree.
+</span><span class='line'>    public Solution(TreeNode root) {
+</span><span class='line'>        list = new ArrayList&lt;TreeNode&gt;();
+</span><span class='line'>        inorder(root, list);
+</span><span class='line'>        len = list.size();
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    private void inorder(TreeNode root, List&lt;TreeNode&gt; list) {
+</span><span class='line'>        if(root == null) return;
+</span><span class='line'>        inorder(root.left, list);
+</span><span class='line'>        list.add(root);
+</span><span class='line'>        inorder(root.right, list);
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    //@return: True if there has next node, or false
+</span><span class='line'>    public boolean hasNext() {
+</span><span class='line'>        return counter &lt; len;
+</span><span class='line'>    }
+</span><span class='line'>    
+</span><span class='line'>    //@return: return next node
+</span><span class='line'>    public TreeNode next() {
+</span><span class='line'>        if(hasNext()) {
+</span><span class='line'>            return list.get(counter++);
+</span><span class='line'>        }
+</span><span class='line'>        return null;
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>use a stack, the top of the stack is the next smallest, and each time pop up the top element, push the node&rsquo;s right child&rsquo;s left -> left &ndash;> leftest node to stack. Time complexity is O(1), space complexity is O(lgn). lgn is the height of the tree.</li>
+</ol>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public class Solution {
+</span><span class='line'>    
+</span><span class='line'>    //use a stack, the thought of inorder
+</span><span class='line'>    //space complexity is O(lgn)
+</span><span class='line'>    private Stack&lt;TreeNode&gt; stack = null;
+</span><span class='line'>    private TreeNode current = null;
+</span><span class='line'>    
+</span><span class='line'>    //@param root: The root of binary tree.
+</span><span class='line'>    public Solution(TreeNode root) {
+</span><span class='line'>        stack = new Stack&lt;TreeNode&gt;();
+</span><span class='line'>        current = root;
+</span><span class='line'>        while(current != null) {
+</span><span class='line'>            stack.push(current);
+</span><span class='line'>            current = current.left;
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    //@return: True if there has next node, or false
+</span><span class='line'>    public boolean hasNext() {
+</span><span class='line'>        return !stack.isEmpty() || current != null;
+</span><span class='line'>    }
+</span><span class='line'>    
+</span><span class='line'>    
+</span><span class='line'>    //return the top of the stack, and put the top's right's left nodes to the stack
+</span><span class='line'>    //@return: return next node
+</span><span class='line'>    public TreeNode next() {
+</span><span class='line'>        TreeNode node = stack.pop();
+</span><span class='line'>        if(node != null) {
+</span><span class='line'>            current = node.right;
+</span><span class='line'>            while(current != null) {
+</span><span class='line'>                stack.push(current);
+</span><span class='line'>                current = current.left;
+</span><span class='line'>            }
+</span><span class='line'>        }
+</span><span class='line'>        return node;
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The Solution is the same as implementing inorder iteratively. Another way to inplement this.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public class Solution {
+</span><span class='line'>    
+</span><span class='line'>    //use a stack, the thought of inorder
+</span><span class='line'>    //space complexity is O(lgn)
+</span><span class='line'>    private Stack&lt;TreeNode&gt; stack = null;
+</span><span class='line'>    private TreeNode current = null;
+</span><span class='line'>    
+</span><span class='line'>    //@param root: The root of binary tree.
+</span><span class='line'>    public Solution(TreeNode root) {
+</span><span class='line'>        stack = new Stack&lt;TreeNode&gt;();
+</span><span class='line'>        current = root;
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    //@return: True if there has next node, or false
+</span><span class='line'>    public boolean hasNext() {
+</span><span class='line'>        return !stack.isEmpty() || current != null;
+</span><span class='line'>    }
+</span><span class='line'>    
+</span><span class='line'>    
+</span><span class='line'>    //when get the next node, first check current node's left nodes are in the stack
+</span><span class='line'>    //@return: return next node
+</span><span class='line'>    public TreeNode next() {
+</span><span class='line'>        while(current != null) {
+</span><span class='line'>            stack.push(current);
+</span><span class='line'>            current = current.left;
+</span><span class='line'>        }
+</span><span class='line'>        TreeNode node = stack.pop();
+</span><span class='line'>        current = node.right;
+</span><span class='line'>        return node;
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Running Median / Median of Integer Stream]]></title>
